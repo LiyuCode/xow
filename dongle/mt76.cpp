@@ -329,6 +329,7 @@ bool MT76::removeClient(uint8_t wcid)
         static_cast<uint8_t>(wcid - 1), 0x00, 0x00, 0x00
     };
 
+    // Remove WCID from connected clients
     connectedWcids &= ~BIT(wcid - 1);
 
     if (!initGain(2, gain))
@@ -341,6 +342,13 @@ bool MT76::removeClient(uint8_t wcid)
     if (!burstWrite(MT_WCID_ADDR(wcid), emptyAddress))
     {
         Log::error("Failed to write WCID");
+
+        return false;
+    }
+
+    if (!connectedWcids && !setLedMode(MT_LED_OFF))
+    {
+        Log::error("Failed to set LED mode");
 
         return false;
     }
