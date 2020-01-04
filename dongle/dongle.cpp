@@ -44,11 +44,6 @@ void Dongle::removed()
 
 void Dongle::clientConnected(uint8_t wcid, Bytes address)
 {
-    if (controllers[wcid - 1])
-    {
-        Log::debug("Controller '%d' reconnecting", wcid);
-    }
-
     auto sendPacket = std::bind(
         &Dongle::sendControllerPacket,
         this,
